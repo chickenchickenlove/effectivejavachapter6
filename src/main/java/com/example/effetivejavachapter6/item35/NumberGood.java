@@ -15,7 +15,7 @@ public enum NumberGood {
         this.number = number;
     }
 
-    public int numberOfMusicians() {
+    public int number() {
         return this.number;
     }
 }
