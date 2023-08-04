@@ -1,21 +1,37 @@
 package com.example.effetivejavachapter6.item37;
 
-import static com.example.effetivejavachapter6.item37.PhaseBad.TransitionBad.*;
+import java.util.EnumMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public enum PhaseBad {
+public enum PhaseGood {
     SOLID, LIQUID, GAS;
 
-    public enum TransitionBad {
-        MELT, FREEZE, BOIL, CONDENSE, SUBLIME, DEPOSIT;
+    public enum TransitionGood {
 
-        private static final TransitionBad[][] TRANSITION_BADS = {
-                {null, MELT, SUBLIME}, // Solid -> Solid, Solid -> Liquid, Solid -> Gas를 의미
-                {FREEZE, null, BOIL},
-                {DEPOSIT, CONDENSE, null},
-        };
-    }
+        MELT(SOLID, LIQUID), FREEZE(LIQUID, SOLID), BOIL(LIQUID, GAS),
+        CONDENSE(GAS, LIQUID), SUBLIME(SOLID, GAS), DEPOSIT(GAS, SOLID);
 
-    public static TransitionBad from(PhaseBad from, PhaseBad to) {
-        return TransitionBad.TRANSITION_BADS[from.ordinal()][to.ordinal()];
+        PhaseGood from;
+        PhaseGood to;
+
+        TransitionGood(PhaseGood from, PhaseGood to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        private static final EnumMap<PhaseGood, EnumMap<PhaseGood, TransitionGood>> m =
+                Stream
+                        .of(values())
+                        .collect(
+                                Collectors.groupingBy(t -> t.from,
+                                                    () -> new EnumMap<>(PhaseGood.class),
+                                Collectors.toMap(t -> t.to, t -> t,
+                                (x, y) -> y, () -> new EnumMap<>(PhaseGood.class)
+                                )));
+
+        public static TransitionGood from(PhaseGood from, PhaseGood to) {
+            return m.get(from).get(to);
+        }
     }
 }
