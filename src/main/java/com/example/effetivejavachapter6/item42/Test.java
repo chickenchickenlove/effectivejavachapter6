@@ -17,7 +17,7 @@ public class Test {
         });
 
 
-        // 람다식
+        // 람다식f
         Collections.sort(List.of("A", "B"),
                 (s1, s2) -> Integer.compare(s1.length(), s2.length()));
 
