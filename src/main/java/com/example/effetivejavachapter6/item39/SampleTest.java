@@ -4,7 +4,7 @@ public class SampleTest {
     @test(ArithmeticException.class)
     public static void m1(){
         int i = 0;
-        i = i / i; // 성공
+        i = i / i; // 성공/
     }
     @test(ArithmeticException.class)
     public static void m2(){
