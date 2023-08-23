@@ -15,7 +15,7 @@ public class OptionalFieldClass {
     public String getFullName() {
 
         if (middleName.isPresent()) {
-            return name + '-' + middleName.get();
+            return name + "--" + middleName.get();
         } else {
             return name;
         }
