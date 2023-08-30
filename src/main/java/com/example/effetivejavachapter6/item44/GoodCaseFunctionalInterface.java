@@ -1,27 +1,25 @@
-package com.example.item44;
+package com.example.effetivejavachapter6.item44;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutorService;
-
 @Slf4j
-public class CautionCaseFunctionalInterface {
+public class GoodCaseFunctionalInterface {
 
 
-    public void doSomething(Action action) {
+    public void doSomething(int n1, int n2, Action action) {
         log.info("action called");
         action.execute(5, 10);
     }
 
-    public void doSomething(Transformer transformer) {
+    public void doSomething(Transformer transformer, int n1, int n2) {
         log.info("transformer called");
         transformer.translate(5, 10);
     }
 
     public static void main(String[] args) {
 
-        CautionCaseFunctionalInterface sut = new CautionCaseFunctionalInterface();
-//        sut.doSomething((x,y) -> x + y);
+        GoodCaseFunctionalInterface sut = new GoodCaseFunctionalInterface();
+        sut.doSomething(1, 2, (x,y) -> x + y);
     }
 
     @FunctionalInterface

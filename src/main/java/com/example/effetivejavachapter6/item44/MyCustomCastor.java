@@ -1,4 +1,4 @@
-package com.example.item44;
+package com.example.effetivejavachapter6.item44;
 
 import java.util.Comparator;
 import java.util.function.Function;
