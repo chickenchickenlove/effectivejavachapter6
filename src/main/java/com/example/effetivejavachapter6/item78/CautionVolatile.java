@@ -2,19 +2,11 @@ package com.example.effetivejavachapter6.item78;
 
 import java.util.concurrent.TimeUnit;
 
-public class StopThreadWithVolatile {
-    private static volatile boolean stopRequested;
-    public static void main(String[] args) throws InterruptedException {
+public class CautionVolatile {
+    private static volatile int a = 0;
 
-        Thread backgroundThread = new Thread(() -> {
-            int i = 0;
-            while (!stopRequested)
-                i++;
-        });
-
-        backgroundThread.start();
-
-        TimeUnit.SECONDS.sleep(1);
-        stopRequested = true;
+    // a++ 원자적으로 연산 안됨.
+    public static void increment() {
+        a++;
     }
 }

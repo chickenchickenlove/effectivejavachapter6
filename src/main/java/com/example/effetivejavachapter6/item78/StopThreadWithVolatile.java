@@ -2,8 +2,8 @@ package com.example.effetivejavachapter6.item78;
 
 import java.util.concurrent.TimeUnit;
 
-public class StopThread {
-    private static boolean stopRequested;
+public class StopThreadWithVolatile {
+    private static volatile boolean stopRequested;
     public static void main(String[] args) throws InterruptedException {
 
         Thread backgroundThread = new Thread(() -> {

@@ -1,12 +1,19 @@
 package com.example.effetivejavachapter6.item78;
 
-import java.util.concurrent.TimeUnit;
+public class EffectiveImmutableInstance {
+    private final String name;
+    private int age;
 
-public class CautionVolatile {
-    private static volatile int a = 0;
+    public EffectiveImmutableInstance(String name) {
+        this.name = name;
+        this.age = 0;
+    }
 
-    // a++ 원자적으로 연산 안됨.
-    public static void increment() {
-        a++;
+    public synchronized void updateAge(int age) {
+        this.age = age;
+    }
+
+    public synchronized int getAge() {
+        return this.age;
     }
 }
