@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
 public class ConcurrentExample {
-
+    // 동기화 관련
     public static long time(Executor executor,
                             int concurrency,
                             Runnable action) throws InterruptedException {
