@@ -91,11 +91,48 @@ public class StreamExample {
         System.out.println(collect4);
     }
 
+    public static void test3() {
+        final User user1 = new User("John1", 1000, Position.STAFF);
+        final User user2 = new User("John2", 2000, Position.STAFF);
+        final User user3 = new User("John3", 3000, Position.CEO);
+        final User user4 = new User("John4", 4000, Position.MANAGER);
+
+        final List<User> users = List.of(user1, user2, user3, user4);
+
+        // Counting 하기
+        int count1 = users.size();
+        long count2 = users.stream().count();
+        Long count3 = users.stream().collect(Collectors.counting());
+
+        System.out.printf("count1 %d / count2 %d / count3 %d \n", count1, count2, count3);
+
+        // MaxBy, MinBy
+        Comparator<User> comparator = Comparator.comparing(User::getSalary);
+        Optional<User> maxBy = users.stream().collect(Collectors.maxBy(comparator));
+        Optional<User> minBy = users.stream().collect(Collectors.minBy(comparator));
+
+        System.out.printf("maxBy %s / minBy %s \n", maxBy.get(), minBy.get(), count3);
+
+        // Sum
+        Integer sum1 = users.stream().collect(Collectors.summingInt(user -> user.getSalary()));
+        System.out.printf("sum1 %d \n", sum1);
+
+        // Summary
+        IntSummaryStatistics summary = users.stream().collect(Collectors.summarizingInt(user -> user.getSalary()));
+        System.out.printf("summary %s \n", summary);
+
+        // Summary
+        Double average = users.stream().collect(Collectors.averagingInt(user -> user.getSalary()));
+        System.out.printf("average %f \n", average);
+
+    }
+
 
 
     public static void main(String[] args) {
         // test1();
-        test2();
+        // test2();
+        test3();
     }
 
 
