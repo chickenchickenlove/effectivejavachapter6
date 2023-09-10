@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 public class StreamExample {
 
 
@@ -18,38 +20,38 @@ public class StreamExample {
         final List<User> users = List.of(user1, user2, user3, user4);
 
         // 숫자 관련 연산
-        Long count = users.stream().collect(Collectors.counting()); // stream의 원소 갯수를 세는 것임. size()로 대체 가능. 혹은 그냥 count 해도 됨.
+        Long count = users.stream().collect(counting()); // stream의 원소 갯수를 세는 것임. size()로 대체 가능. 혹은 그냥 count 해도 됨.
         System.out.printf("Count %d \n", count);
 
-        Double avgInt = users.stream().collect(Collectors.averagingInt(User::getSalary));
+        Double avgInt = users.stream().collect(averagingInt(User::getSalary));
         System.out.printf("avgInt %f \n", avgInt);
 
-        IntSummaryStatistics summary = users.stream().collect(Collectors.summarizingInt(User::getSalary));
+        IntSummaryStatistics summary = users.stream().collect(summarizingInt(User::getSalary));
         System.out.printf("summary %s \n", summary);
 
         // 문자열 연산
-        String joinName1 = users.stream().map(User::getName).collect(Collectors.joining());
+        String joinName1 = users.stream().map(User::getName).collect(joining());
         System.out.printf("joinName1 %s \n", joinName1);
 
-        String joinName2 = users.stream().map(User::getName).collect(Collectors.joining(", "));
+        String joinName2 = users.stream().map(User::getName).collect(joining(", "));
         System.out.printf("joinName2 %s \n", joinName2);
 
         // 최대값, 최소값
         Comparator<User> userComparator = Comparator.comparingInt(user -> ((User) user).getSalary());
-        Optional<User> maxCount = users.stream().collect(Collectors.maxBy(userComparator));
+        Optional<User> maxCount = users.stream().collect(maxBy(userComparator));
         System.out.printf("maxCount %d \n", maxCount.get().getSalary());
 
-        Optional<User> minCount = users.stream().collect(Collectors.minBy(userComparator));
+        Optional<User> minCount = users.stream().collect(minBy(userComparator));
         System.out.printf("minCount %d \n", minCount.get().getSalary());
 
         // Reducing
         // Mapper를 쓰면 map을 안해도 됨.
         Function<User, Integer> mapper = user -> user.getSalary();
-        Integer reduced = users.stream().collect(Collectors.reducing(0, mapper, (integer, integer2) -> integer + integer2));
+        Integer reduced = users.stream().collect(reducing(0, mapper, (integer, integer2) -> integer + integer2));
         System.out.printf("reducing Result %d \n", reduced);
 
         // Mapper를 안 쓰면 map을 해야함.
-        Integer reduced2 = users.stream().map(user -> user.getSalary()).collect(Collectors.reducing(0, (o, o2) -> o + o2));
+        Integer reduced2 = users.stream().map(user -> user.getSalary()).collect(reducing(0, (o, o2) -> o + o2));
         System.out.printf("reducing Result %d \n", reduced2);
     }
 
@@ -67,27 +69,29 @@ public class StreamExample {
         // Classifier : 어떤 것으로 분류할지 결정.
         // MapFactory
         // Downstream
-        Map<Position, List<User>> collect = users.stream().collect(Collectors.groupingBy(User::getPosition));
+        Map<Position, List<User>> collect = users.stream().collect(groupingBy(User::getPosition));
         System.out.println(collect);
 
 
         // 필터해서 모집하기.
-        Map<Position, List<User>> collect1 = users.stream().collect(Collectors.
-                groupingBy(User::getPosition, Collectors.filtering(user -> user.getSalary() > 100, Collectors.toList())));
+        Map<Position, List<User>> collect1 = users.stream().collect(groupingBy(User::getPosition, filtering(user -> user.getSalary() > 100, toList())));
 
         // 새로운 객체로 바꿔서 모집하기.
-        Map<Position, List<Integer>> collect2 = users.stream().collect(Collectors.groupingBy(user -> user.getPosition(), Collectors.mapping(user -> user.getSalary(), Collectors.toList())));
+        Map<Position, List<Integer>> collect2 = users.stream().collect(groupingBy(user -> user.getPosition(), mapping(user -> user.getSalary(), toList())));
         System.out.println(collect2);
 
         // 다단계 Grouping
-        Map<Position, Map<String, List<User>>> collect3 = users.stream().collect(Collectors.groupingBy(user -> user.getPosition(),
-                Collectors.groupingBy(user -> user.getName(), Collectors.toList())));
+        Map<Position, Map<String, List<User>>> collect3 =
+                users.stream()
+                        .collect(groupingBy(
+                                User::getPosition, groupingBy(User::getName, toList())
+                        ));
 
         System.out.println(collect3);
 
 
         // 분할하기
-        Map<Boolean, List<User>> collect4 = users.stream().collect(Collectors.partitioningBy(user -> user.getPosition().equals(Position.CEO)));
+        Map<Boolean, List<User>> collect4 = users.stream().collect(partitioningBy(user -> user.getPosition().equals(Position.CEO)));
         System.out.println(collect4);
     }
 
@@ -102,27 +106,27 @@ public class StreamExample {
         // Counting 하기
         int count1 = users.size();
         long count2 = users.stream().count();
-        Long count3 = users.stream().collect(Collectors.counting());
+        Long count3 = users.stream().collect(counting());
 
         System.out.printf("count1 %d / count2 %d / count3 %d \n", count1, count2, count3);
 
         // MaxBy, MinBy
         Comparator<User> comparator = Comparator.comparing(User::getSalary);
-        Optional<User> maxBy = users.stream().collect(Collectors.maxBy(comparator));
-        Optional<User> minBy = users.stream().collect(Collectors.minBy(comparator));
+        Optional<User> maxBy = users.stream().collect(maxBy(comparator));
+        Optional<User> minBy = users.stream().collect(minBy(comparator));
 
         System.out.printf("maxBy %s / minBy %s \n", maxBy.get(), minBy.get(), count3);
 
         // Sum
-        Integer sum1 = users.stream().collect(Collectors.summingInt(user -> user.getSalary()));
+        Integer sum1 = users.stream().collect(summingInt(user -> user.getSalary()));
         System.out.printf("sum1 %d \n", sum1);
 
         // Summary
-        IntSummaryStatistics summary = users.stream().collect(Collectors.summarizingInt(user -> user.getSalary()));
+        IntSummaryStatistics summary = users.stream().collect(summarizingInt(user -> user.getSalary()));
         System.out.printf("summary %s \n", summary);
 
         // Summary
-        Double average = users.stream().collect(Collectors.averagingInt(user -> user.getSalary()));
+        Double average = users.stream().collect(averagingInt(user -> user.getSalary()));
         System.out.printf("average %f \n", average);
 
     }
@@ -130,9 +134,9 @@ public class StreamExample {
 
 
     public static void main(String[] args) {
-        // test1();
-        // test2();
-        test3();
+//         test1();
+         test2();
+//         test3();
     }
 
 
